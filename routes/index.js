@@ -1,4 +1,5 @@
 var express = require('express');
+var cors = require('cors');
 var router = express.Router();
 var path = require('path');
 var _ = require('lodash');
@@ -52,6 +53,9 @@ router.get('/room/:name', function (req, res) {
   var token;
   console.log('attempting to create a session associated with the room: ' + roomName);
 
+  console.log("List of current rooms: ");
+  console.log(roomToSessionIdDictionary);
+
   // if the room name is associated with a session ID, fetch that
   if (roomToSessionIdDictionary[roomName]) {
     sessionId = roomToSessionIdDictionary[roomName];
@@ -62,7 +66,8 @@ router.get('/room/:name', function (req, res) {
     res.send({
       apiKey: apiKey,
       sessionId: sessionId,
-      token: token
+      token: token,
+      name: roomName,
     });
   }
   // if this is the first time the room is being accessed, create a new session ID
@@ -86,7 +91,8 @@ router.get('/room/:name', function (req, res) {
       res.send({
         apiKey: apiKey,
         sessionId: session.sessionId,
-        token: token
+        token: token,
+        name: roomName
       });
     });
   }
